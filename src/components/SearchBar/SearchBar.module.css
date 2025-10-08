@@ -1,0 +1,87 @@
+.header {
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-bottom: none; /* Убираем границу, так как она не нужна на темном фоне */
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Центрирует .container внутри .header */
+}
+
+.container {
+  /* Максимальная ширина, чтобы не растягивалось на весь экран */
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto; /* Центрирует контейнер относительно header */
+  display: flex;
+  /* Центрируем только форму, так как ссылка удалена */
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.searchForm {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+/* СТИЛИ КНОПКИ (Bright and Beautiful) */
+.button {
+  padding: 12px 24px;
+  font-size: 18px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  /* ЯРКИЙ БИРЮЗОВО-СИНИЙ ГРАДИЕНТ */
+
+  background: linear-gradient(180deg, #11b8d2 0%, #008cba 100%);
+  /* МЯГКАЯ ТЕНЬ */
+  box-shadow: 0 4px 15px rgba(17, 184, 210, 0.5);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.button:hover {
+  background: linear-gradient(180deg, #008cba 0%, #11b8d2 100%);
+  box-shadow: 0 2px 8px rgba(17, 184, 210, 0.7);
+  transform: translateY(1px); /* Легкое смещение вниз при наведении */
+}
+
+/* НОВЫЕ СТИЛИ ПОЛЯ ВВОДА (Modern and Focus-Oriented) */
+
+.input {
+  /* Базовый вид */
+  padding: 10px 15px;
+  font-size: 16px;
+  width: 100%;
+  border: 2px solid #ddd; /* Светлая, нейтральная граница */
+  border-radius: 8px; /* Скругление, как у кнопки */
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  /* Эффект фокуса: яркая граница и мягкое свечение */
+  border-color: #11b8d2; /* Цвет в тон градиенту кнопки */
+  outline: none; /* Убираем стандартное свечение браузера */
+  box-shadow: 0 0 0 3px rgba(17, 184, 210, 0.3); /* Яркое, мягкое свечение */
+}
+
+/* Скрытый класс остается без изменений */
+
+.visuallyHidden {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  overflow: hidden;
+}
