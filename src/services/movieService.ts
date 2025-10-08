@@ -1,9 +1,5 @@
-import axios from "axios"; // КРИТИЧНЕ ЗМІНЕННЯ: Явно використовуємо axios
+import axios from "axios";
 import { type Movie } from "../types/movie";
-
-// ----------------------------------------------------------------------
-// ВОССТАНОВЛЕННЫЕ ТИПЫ
-// ----------------------------------------------------------------------
 export interface Genre {
   id: number;
   name: string;
@@ -20,7 +16,7 @@ export interface MovieDetails extends Movie {
 export interface TmdbResponse {
   page: number;
   results: Movie[];
-  total_pages: number;
+  total_pages: number; // Включено для пагинации
   total_results: number;
 }
 // ----------------------------------------------------------------------
@@ -32,12 +28,15 @@ const VITE_TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 export async function fetchMovies(
   searchQuery: string,
   page: number = 1
-): Promise<Movie[]> {
-  // КРИТИЧНЕ ЗМІНЕННЯ: Повертаємо Movie[]
+): Promise<TmdbResponse> {
   if (!searchQuery) {
-    return [];
-  } // КРИТИЧНЕ ЗМІНЕННЯ: Використовуємо axios.get з повним URL
-
+    return {
+      page: 0,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    };
+  }
   const response = await axios.get<TmdbResponse>(`${BASE_URL}/search/movie`, {
     params: {
       query: searchQuery,
@@ -45,30 +44,9 @@ export async function fetchMovies(
       language: "en-US",
     },
     headers: {
-      // Заголовок Authorization повинен бути доданий до кожного запиту
       Authorization: `Bearer ${VITE_TMDB_API_KEY}`,
     },
   });
 
-  return response.data.results; // КРИТИЧНЕ ЗМІНЕННЯ: Повертаємо лише масив results
-}
-
-export async function fetchMovieDetails(
-  movieId: number
-): Promise<MovieDetails> {
-  // КРИТИЧНЕ ЗМІНЕННЯ: Використовуємо axios.get з повним URL
-  const response = await axios.get<MovieDetails>(
-    `${BASE_URL}/movie/${movieId}`,
-    {
-      params: {
-        language: "en-US",
-      },
-      headers: {
-        // Заголовок Authorization також додаємо і сюди
-        Authorization: `Bearer ${VITE_TMDB_API_KEY}`,
-      },
-    }
-  );
-
-  return response.data;
+  return response.data; // Возвращаем весь объект TmdbResponse
 }
