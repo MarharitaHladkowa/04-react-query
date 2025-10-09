@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchMovies } from "../../services/movieService";
 import { Toaster, toast } from "react-hot-toast";
 
@@ -15,7 +15,6 @@ import MovieModal from "../MovieModal/MovieModal";
 // Импорт типов
 import type { Movie } from "../../types/movie";
 import type { TmdbResponse } from "../../services/movieService";
-
 import appCss from "./App.module.css";
 
 export default function App() {
@@ -40,6 +39,7 @@ export default function App() {
     enabled: !!query,
 
     staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData,
   });
 
   // 5. Деструктуризація даних для рендерингу
