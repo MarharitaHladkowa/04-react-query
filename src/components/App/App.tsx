@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchMovies } from "../../services/movieService";
 import { Toaster, toast } from "react-hot-toast";
@@ -28,24 +28,35 @@ export default function App() {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   // 4. ВИКОРИСТАННЯ useQuery ДЛЯ ОТРИМАННЯ ДАНИХ
-  const { data, isLoading, isError, error } = useQuery<TmdbResponse>({
-    // КЛЮЧ: Запрос выполняется повторно при изменении query ИЛИ page
-    queryKey: ["movies", query, page],
+  const { data, isLoading, isError, error, isSuccess } = useQuery<TmdbResponse>(
+    {
+      // КЛЮЧ: Запрос выполняется повторно при изменении query ИЛИ page
+      queryKey: ["movies", query, page],
 
-    // ФУНКЦИЯ: Вызываем API с текущим запросом и страницей
-    queryFn: () => fetchMovies(query, page),
+      // ФУНКЦИЯ: Вызываем API с текущим запросом и страницей
+      queryFn: () => fetchMovies(query, page),
 
-    // Запрос выполняется, только если query не пустой
-    enabled: !!query,
+      // Запрос выполняется, только если query не пустой
+      enabled: !!query,
 
-    staleTime: 1000 * 60 * 5,
-    placeholderData: keepPreviousData,
-  });
+      staleTime: 1000 * 60 * 5,
+      placeholderData: keepPreviousData,
+    }
+  );
 
   // 5. Деструктуризація даних для рендерингу
   const movies: Movie[] = data?.results ?? [];
   const totalPages: number = data?.total_pages ?? 0;
-
+  useEffect(() => {
+    // Показываем тост, если:
+    // 1. Запрос успешно завершен (isSuccess === true)
+    // 2. Есть активный поисковый запрос (query)
+    // 3. Результатов нет (movies.length === 0)
+    if (isSuccess && query && movies.length === 0) {
+      toast.error(`No movies found for your request: "${query}".`);
+    }
+    // Зависимости: isSuccess (для реакции на завершение), movies.length (для проверки результата), query (для текста тоста)
+  }, [isSuccess, movies.length, query]);
   // 6. Функції для управління модальним вікном (без змін)
   const handleMovieSelect = (movie: Movie) => {
     setSelectedMovie(movie);
